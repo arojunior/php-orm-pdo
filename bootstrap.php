@@ -6,13 +6,12 @@ include_once './helper/Helper.php';
 
 if (!empty($_GET['pg'])):
     $src = explode('/', $_GET['pg']);
-    $controller = ucfirst($src[0]);
+    $model = ucfirst($src[0]);
+    $controller = $model.'Controller';
     $action = $src[1];
 
-    include './model/'.$controller.'.php';
-    include './controller/'.$controller.'Controller.php';
-
-    $controller .= 'Controller';
+    include './model/'.$model.'.php';
+    include './controller/'.$controller.'.php';
 
     $class = new $controller();
 

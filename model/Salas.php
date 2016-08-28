@@ -1,4 +1,5 @@
 <?php
+
  class Salas extends Model
  {
      protected $table = 'chat_salas';
