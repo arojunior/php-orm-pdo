@@ -10,7 +10,7 @@ class Mensagens extends Model
         $this->query("
         SELECT
         	Usuarios.nome as 'usuario_nome',
-            Usuario.id as 'usuario_id',
+            Usuarios.id as 'usuario_id',
         	Mensagens.mensagem,
         	Mensagens.`data`
         FROM chat_mensagem_sala as Mensagens
