@@ -1,9 +1,9 @@
 config.ini
 .DS_Store
-/Controller/EventosController.php
-/Controller/MensagensController.php
-/Controller/SalasController.php
-/Model/Eventos.php
-/Model/Mensagens.php
-/Model/Salas.php
+/controller/EventosController.php
+/controller/MensagensController.php
+/controller/SalasController.php
+/model/Eventos.php
+/model/Mensagens.php
+/model/Salas.php
 
