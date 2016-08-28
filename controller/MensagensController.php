@@ -2,19 +2,21 @@
 
 class MensagensController extends Controller
 {
+    public $use = ['Usuarios'];
+
     public function registrar($dados)
     {
         if (!empty($dados)) {
-            $this->model->save($dados);
+            $this->Mensagens->save($dados);
         } else {
             throw new Exception('Acesso indevido');
         }
     }
 
-    public function listar($dados)
+    public function sala($dados)
     {
         if (!empty($dados)) {
-            $result = $this->model->find([
+            $result = $this->Mensagens->find([
                 'conditions' => ['chat_evento_id' => $dados['evento_id']],
             ]);
 
@@ -23,5 +25,12 @@ class MensagensController extends Controller
         } else {
             throw new Exception('Acesso indevido');
         }
+    }
+
+    public function teste()
+    {
+        $result = $this->Usuarios->find();
+        $helper = new Helper();
+        echo $helper->json($result);
     }
 }

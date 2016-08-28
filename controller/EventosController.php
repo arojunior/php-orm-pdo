@@ -4,7 +4,7 @@ class EventosController extends Controller
 {
     public function listar()
     {
-        $result = $this->model->find([
+        $result = $this->Eventos->find([
             'fields' => ['id', 'nome'],
             'conditions' => ['status' => 'A'],
         ]);

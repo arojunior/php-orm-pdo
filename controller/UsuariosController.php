@@ -6,7 +6,7 @@ class UsuariosController extends Controller
     {
         if (!empty($dados)) {
             $dados['nome'] = utf8_decode($dados['nome']);
-            $this->model->save($dados);
+            $this->Usuarios->save($dados);
         } else {
             throw new Exception('Acesso indevido');
         }
