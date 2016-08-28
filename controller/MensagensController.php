@@ -16,9 +16,7 @@ class MensagensController extends Controller
     public function sala($dados)
     {
         if (!empty($dados)) {
-            $result = $this->Mensagens->find([
-                'conditions' => ['chat_evento_id' => $dados['evento_id']],
-            ]);
+            $result = $this->Mensagens->sala($dados['chat_evento_id']);
 
             $helper = new Helper();
             echo $helper->json($result);
@@ -29,8 +27,10 @@ class MensagensController extends Controller
 
     public function teste()
     {
-        $result = $this->Usuarios->find();
-        $helper = new Helper();
-        echo $helper->json($result);
+        $result = $this->Mensagens->sala(1);
+        if (!empty($result)) {
+            $helper = new Helper();
+            echo $helper->json($result);
+        }
     }
 }

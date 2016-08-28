@@ -73,7 +73,8 @@ class Model extends Database
 
     public function query($sql)
     {
-        $this->stmt = $this->conn->query($sql);
+        $this->stmt = $this->conn->prepare($sql);
+        $this->stmt->execute();
         $result = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->count = count($result);
 
