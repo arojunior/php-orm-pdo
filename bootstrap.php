@@ -8,7 +8,7 @@ if (!empty($_GET['pg'])):
     $src = explode('/', $_GET['pg']);
     $model = ucfirst($src[0]);
     $controller = $model.'Controller';
-    $action = $src[1];
+    $action = (isset($src[1])) ? $src[1] : 'index';
 
     include './model/'.$model.'.php';
     include './controller/'.$controller.'.php';
