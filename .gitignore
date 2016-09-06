@@ -6,4 +6,5 @@ controller/SalasController.php
 model/Eventos.php
 model/Mensagens.php
 model/Salas.php
+view/Eventos
 .idea

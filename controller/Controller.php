@@ -1,7 +1,12 @@
 <?php
 
+//namespace SimpleORM\Controller;
+
 class Controller
 {
+    /*
+    * create instance of model with same controller name
+    */
     public function __construct()
     {
         $class = str_replace('Controller', '', get_class($this));
@@ -10,6 +15,9 @@ class Controller
         self::loadModels();
     }
 
+    /*
+    * create instances of models with different names when set $this->use = []
+    */
     private function loadModels()
     {
         if (isset($this->use)) {

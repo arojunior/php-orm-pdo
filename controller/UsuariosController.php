@@ -11,4 +11,12 @@ class UsuariosController extends Controller
             throw new Exception('Acesso indevido');
         }
     }
+
+    public function listar()
+    {
+        $result = $this->Usuarios->find();
+
+        $helper = new Helper();
+        return ['listagem' => $helper->json($result)];
+    }
 }

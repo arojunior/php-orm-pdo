@@ -1,5 +1,7 @@
 <?php
 
+//namespace SimpleORM\Model;
+
 require_once 'Database.php';
 
 class Model extends Database
