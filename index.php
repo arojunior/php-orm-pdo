@@ -7,11 +7,17 @@ require_once __DIR__ . '/model/Model.php';
 require_once __DIR__ . '/controller/Controller.php';
 require_once __DIR__ . '/helper/Helper.php';
 
-if (!empty($_GET['pg'])) {
-    $src = explode('/', $_GET['pg']);
-    $model = ucfirst($src[0]);
+$uri = $_SERVER['REQUEST_URI'];
+
+if ($uri == '/') {
+
+    echo "No file selected";
+
+} else {
+    $src = explode('/', $uri);
+    $model = ucfirst($src[1]);
     $controller = $model.'Controller';
-    $method = (isset($src[1])) ? $src[1] : 'index';
+    $method = (isset($src[2])) ? $src[2] : 'index';
 
     /*
     * require files of current Model/Controller
@@ -52,6 +58,4 @@ if (!empty($_GET['pg'])) {
     if (file_exists($view_file)) {
         include ($view_file);
     }
-} else {
-    throw new Exception('Permission denied');
 }

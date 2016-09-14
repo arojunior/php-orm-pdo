@@ -1,1 +1,1 @@
-<?php echo $listagem; ?>
+<?php echo $listagem;
