@@ -1,6 +1,6 @@
 <?php
 
-//namespace SimpleORM\Controller;
+//namespace SimpleORM\core\controller\Controller;
 
 class Controller
 {

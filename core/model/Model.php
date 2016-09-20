@@ -1,6 +1,6 @@
 <?php
 
-//namespace SimpleORM\Model;
+//namespace SimpleORM\core\model\Model;
 
 require_once 'Database.php';
 

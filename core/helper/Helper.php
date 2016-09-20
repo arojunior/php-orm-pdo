@@ -1,4 +1,5 @@
 <?php
+//namespace SimpleORM\core\helper\Helper;
 
 class Helper
 {

@@ -3,16 +3,14 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
-require_once __DIR__ . '/model/Model.php';
-require_once __DIR__ . '/controller/Controller.php';
-require_once __DIR__ . '/helper/Helper.php';
+require_once __DIR__.'/core//model/Model.php';
+require_once __DIR__.'/core/controller/Controller.php';
+require_once __DIR__.'/core/helper/Helper.php';
 
 $uri = $_SERVER['REQUEST_URI'];
 
 if ($uri == '/') {
-
-    echo "No file selected";
-
+    echo 'No file selected';
 } else {
     $src = explode('/', $uri);
     $model = ucfirst($src[1]);
@@ -22,24 +20,24 @@ if ($uri == '/') {
     /*
     * require files of current Model/Controller
     */
-    $model_file = __DIR__ . '/model/'.$model.'.php';
+    $model_file = __DIR__.'/app/model/'.$model.'.php';
 
     if (file_exists($model_file)) {
         require_once $model_file;
     }
 
-    $controller_file = __DIR__ . '/controller/'.$controller.'.php';
+    $controller_file = __DIR__.'/app/controller/'.$controller.'.php';
 
     if (file_exists($controller_file)) {
         require_once $controller_file;
     } else {
-        throw new Exception('Controller ' . $controller . ' Not Found');
+        throw new Exception('Controller '.$controller.' Not Found');
     }
 
     /*
     * call current class/method
     */
-    $set = call_user_func_array(array(new $controller, $method), $_POST);
+    $set = call_user_func_array(array(new $controller(), $method), $_POST);
 
     /*
     * Declare all variables if passed in return
@@ -53,9 +51,9 @@ if ($uri == '/') {
     /*
     * If method has a view file, include
     */
-    $view_file = __DIR__ . '/view/' . $model . '/' . $method . '.php';
+    $view_file = __DIR__.'/app/view/'.$model.'/'.$method.'.php';
 
     if (file_exists($view_file)) {
-        include ($view_file);
+        include $view_file;
     }
 }
