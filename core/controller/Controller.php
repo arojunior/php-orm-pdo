@@ -22,7 +22,7 @@ class Controller
     {
         if (isset($this->use)) {
             foreach ($this->use as $model) {
-                require './model/'.$model.'.php';
+                require './app/model/'.$model.'.php';
                 $this->{$model} = new $model();
             }
         }

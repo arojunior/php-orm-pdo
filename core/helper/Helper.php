@@ -9,14 +9,14 @@ class Helper
 
         array_walk_recursive($dados, function (&$value, $key) {
             if (is_string($value)) {
-                $value = utf8_encode(self::removerAcentos($value));
+                $value = utf8_encode(self::clean($value));
             }
         });
 
         return json_encode($dados);
     }
 
-    public function removerAcentos($string)
+    public function clean($string)
     {
         $table = array(
              '?' => 'S', '?' => 's', '?' => 'Dj', '?' => 'dj', '?' => 'Z',
@@ -37,8 +37,7 @@ class Helper
              'ª' => '',
          );
 
-         // Traduz os caracteres em $string, baseado no vetor $table
-         $string = strtr($string, $table);
+        $string = strtr($string, $table);
 
         return $string;
     }

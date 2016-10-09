@@ -1,6 +1,6 @@
 <?php
 
-//namespace SimpleORM\core\model\Model;
+//namespace SimpleORM\Model;
 
 require_once 'Database.php';
 
@@ -57,7 +57,7 @@ class Model extends Database
 
         $fields = (isset($this->dados['fields'])) ? self::fields() : '*';
         $table = self::table();
-        $where = (isset($this->dados['conditions'])) ? self::conditions('AND') : '';
+        $where = (isset($this->dados['conditions'])) ? self::conditions(' AND ') : '';
         $sql = "SELECT {$fields} FROM {$table} {$where}";
         $this->stmt = $this->conn->prepare($sql);
 

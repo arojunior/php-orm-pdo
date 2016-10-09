@@ -1,0 +1,14 @@
+{
+    "name": "arojunior/php-orm-pdo",
+    "description": "Micro PHP ORM Framework to solve basic problems",
+    "version": "1.0",
+    "authors": [
+        {
+            "name": "Junior Oliveira",
+            "email": "arojunior@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    }
+}
