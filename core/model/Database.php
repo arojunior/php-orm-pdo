@@ -1,6 +1,6 @@
 <?php
 
-//namespace SimpleORM\core\model\Database;
+namespace SimpleORM\core\model;
 
 class Database
 {

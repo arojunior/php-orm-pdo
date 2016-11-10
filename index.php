@@ -1,12 +1,14 @@
 <?php
-
+// Default accepting requests from everywhere. You can remove it if you want
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
-require_once __DIR__.'/core//model/Model.php';
-require_once __DIR__.'/core/controller/Controller.php';
-require_once __DIR__.'/core/helper/Helper.php';
-require_once __DIR__.'/app//model/AppModel.php';
+define('DS', DIRECTORY_SEPARATOR);
+
+use SimpleORM\core\helper\Helper;
+use SimpleORM\core\model\Model;
+use SimpleORM\core\controller\Controller;
+use SimpleORM\core\model\AppModel;
 
 $uri = $_SERVER['REQUEST_URI'];
 
@@ -35,13 +37,13 @@ if ($uri == '/') {
     /*
     * require files of current Model/Controller
     */
-    $model_file = __DIR__.'/app/model/'.$model.'.php';
+    $model_file = __DIR__ . DS .'app' . DS. ' model ' . DS . $model.'.php';
 
     if (file_exists($model_file)) {
         require_once $model_file;
     }
 
-    $controller_file = __DIR__.'/app/controller/'.$controller.'.php';
+    $controller_file = __DIR__ . DS . 'app' . DS . 'controller' . DS . $controller.'.php';
 
     if (file_exists($controller_file)) {
         require_once $controller_file;
@@ -52,7 +54,6 @@ if ($uri == '/') {
     /*
     * call current class/method
     */
-    //$set = call_user_func_array(array(new $controller(), $method), $the_request);
     $class = new $controller();
     $set = $class->$method($the_request);
 
@@ -68,7 +69,7 @@ if ($uri == '/') {
     /*
     * If method has a view file, include
     */
-    $view_file = __DIR__.'/app/view/'.$model.'/'.$method.'.php';
+    $view_file = __DIR__ . DS . 'app' . DS . 'view' . DS . $model . DS . $method .'.php';
 
     if (file_exists($view_file)) {
         include $view_file;
