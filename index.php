@@ -1,5 +1,5 @@
 <?php
-// Default accepting requests from everywhere. You can remove it if you want
+// Default allow requests from everywhere. You can remove it if you want
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 

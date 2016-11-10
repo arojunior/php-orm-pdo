@@ -7,7 +7,7 @@ class Database
     protected $conn;
 
     /*
-    * create database conection
+    * create database connection
     */
     public function __construct($config = null)
     {
