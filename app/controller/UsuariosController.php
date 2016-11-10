@@ -1,22 +1,21 @@
 <?php
 
+namespace SimpleORM\app\controller;
+
+use SimpleORM\core\controller\Controller;
+
 class UsuariosController extends Controller
 {
-    public function login($dados)
+
+    public function index()
     {
-        if (!empty($dados)) {
-            $dados['nome'] = utf8_decode($dados['nome']);
-            $this->Usuarios->save($dados);
-        } else {
-            throw new Exception('Acesso indevido');
-        }
+        return ['texto'  => 'teste'];
     }
 
     public function listar()
     {
         $result = $this->Usuarios->find();
 
-        $helper = new Helper();
-        return ['listagem' => $helper->json($result)];
+        return ['listagem' => $this->Helper->json($result)];
     }
 }

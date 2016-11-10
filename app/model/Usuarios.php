@@ -1,7 +1,12 @@
 <?php
 
-class Usuarios extends Model
+namespace SimpleORM\app\model;
+
+require_once APP . 'model' . DS .'AppModel.php';
+use SimpleORM\app\model\AppModel;
+
+class Usuarios extends AppModel
 {
-    protected $table = 'chat_usuarios';
+    protected $table = 'usuarios';
     //protected $pk = 'id';
 }

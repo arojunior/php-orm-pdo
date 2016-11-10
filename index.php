@@ -4,11 +4,11 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
 define('DS', DIRECTORY_SEPARATOR);
+define('APP', __DIR__ . DS . 'app' . DS);
+define('CORE', __DIR__ . DS . 'core' . DS);
 
-use SimpleORM\core\helper\Helper;
-use SimpleORM\core\model\Model;
-use SimpleORM\core\controller\Controller;
-use SimpleORM\core\model\AppModel;
+require_once CORE . 'controller' . DS . 'Controller.php';
+use SimpleORM\app\controller;
 
 $uri = $_SERVER['REQUEST_URI'];
 
@@ -28,7 +28,7 @@ if ($uri == '/') {
     $src = explode('/', $uri);
     $model = ucfirst($src[1]);
     $controller = $model.'Controller';
-    $method = (isset($src[2])) ? $src[2] : 'index';
+    $method = (isset($src[2])) ? $src[2] : 'index';    
 
     if (isset($src[3]) && empty($the_request)) {
         $the_request = filter_var($src[3], FILTER_SANITIZE_STRING);
@@ -37,25 +37,28 @@ if ($uri == '/') {
     /*
     * require files of current Model/Controller
     */
-    $model_file = __DIR__ . DS .'app' . DS. ' model ' . DS . $model.'.php';
+    $model_file = __DIR__ . DS . 'app' . DS. ' model ' . DS . $model.'.php';
 
     if (file_exists($model_file)) {
         require_once $model_file;
     }
 
-    $controller_file = __DIR__ . DS . 'app' . DS . 'controller' . DS . $controller.'.php';
-
-    if (file_exists($controller_file)) {
-        require_once $controller_file;
-    } else {
-        throw new Exception('Controller '.$controller.' Not Found');
-    }
-
     /*
     * call current class/method
     */
-    $class = new $controller();
-    $set = $class->$method($the_request);
+    $controller_file = APP . 'controller' . DS . $controller.'.php';
+
+    if (file_exists($controller_file)) {
+
+        require $controller_file;
+
+        $load_class = 'SimpleORM\app\controller\\' . $controller;
+        $class = new $load_class();
+        $set = $class->$method($the_request);
+
+    } else {
+        throw new Exception('Controller '.$controller.' Not Found');
+    }
 
     /*
     * Declare all variables if passed in return

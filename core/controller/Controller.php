@@ -2,17 +2,25 @@
 
 namespace SimpleORM\core\controller;
 
+require CORE . 'helper' . DS . 'Helper.php';
+use SimpleORM\core\helper\Helper;
+
 class Controller
 {
+    private $class;
     /*
     * create instance of model with same controller name
     */
     public function __construct()
     {
-        $class = str_replace('Controller', '', get_class($this));
-        $this->{$class} = new $class();
+        $namespace = 'SimpleORM\app\controller\\';
+        $class = str_replace($namespace, '', get_class($this));
+        $this->class = str_replace('Controller', '', $class);
+
+        $this->Helper = new Helper();
 
         self::loadModels();
+        self::loadHelpers();
     }
 
     /*
@@ -20,11 +28,28 @@ class Controller
     */
     private function loadModels()
     {
-        if (isset($this->use)) {
+        $this->use = !isset($this->use) ? [$this->class] : $this->use;
+
+        if ($this->use) {
             foreach ($this->use as $model) {
-                require './app/model/'.$model.'.php';
-                $this->{$model} = new $model();
+                self::load('model', $model);
             }
         }
+    }
+
+    private function loadHelpers()
+    {
+        if (isset($this->helpers)) {
+            foreach ($this->helpers as $helper) {
+                self::load('helper', $helper);
+            }
+        }
+    }
+
+    private function load($path, $class)
+    {
+        require APP . $path . DS . $class . '.php';
+        $load_class = 'SimpleORM\app\\' . $path . '\\' . $class;
+        $this->{$class} = new $load_class();
     }
 }
