@@ -5,20 +5,21 @@ namespace SimpleORM\core\model;
 class Database
 {
     protected $conn;
+    public $db_config;
 
     /*
     * create database connection
     */
-    public function __construct($config = null)
+    public function __construct()
     {
-        if (empty($config)) {
-            $config = parse_ini_file('config.ini');
+        if (empty($this->db_config)) {
+            $this->db_config = parse_ini_file('config.ini');
         }
 
-        $this->conn = new \PDO("mysql:host={$config['db_host']};".
-                                "dbname={$config['db_name']}",
-                                $config['db_user'],
-                                $config['db_pass']
+        $this->conn = new \PDO("mysql:host={$this->db_config['db_host']};".
+                                "dbname={$this->db_config['db_name']}",
+                                $this->db_config['db_user'],
+                                $this->db_config['db_pass']
                             );
     }
 }
