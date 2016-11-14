@@ -7,11 +7,18 @@ Let's get started:
   - CRUD functions
   - Auto load Model classes in Controllers
   - To use the automatic functions you should use the filename and structure conventions
-  - Just follow the exemple on /controller/UsuariosController.php
+  - Just follow the exemple on /controller/UsersController.php
   - All controllers in /app/controllers folder
   - All models in /app/models folder
 
 So you have two options: you can use like a framework puting your files inside the folder structure or just use like a vendor and extending the Model class (/core/model/Model.php)
+
+**Convetions to use as a framework**
+
+  - All controllers in /app/controller path
+  - All models in /app/model path
+  - All views in /app/view path
+  - Filenames and classes must has the same name
 
 **CRUD**
 
@@ -21,7 +28,6 @@ First of all you have to change the config.ini file and then create a model, for
 <?php
 	namespace SimpleORM\app\model;
 
-	require_once CORE . 'model' . DS .'Model.php';
 	use SimpleORM\core\model\Model;
 
 	class Users extends Model
