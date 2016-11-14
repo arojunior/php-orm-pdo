@@ -4,7 +4,7 @@ namespace SimpleORM\app\controller;
 
 use SimpleORM\core\controller\Controller;
 
-class UsuariosController extends Controller
+class UsersController extends Controller
 {
 
     public function index()
@@ -12,10 +12,10 @@ class UsuariosController extends Controller
         return ['texto'  => 'teste'];
     }
 
-    public function listar()
+    public function get()
     {
-        $result = $this->Usuarios->find();
+        $result = $this->Users->find();
 
-        return ['listagem' => $this->Helper->json($result)];
+        return ['list' => $this->Helper->json($result)];
     }
 }

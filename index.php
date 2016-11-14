@@ -7,6 +7,7 @@ define('DS', DIRECTORY_SEPARATOR);
 define('APP', __DIR__ . DS . 'app' . DS);
 define('CORE', __DIR__ . DS . 'core' . DS);
 
+require_once CORE . 'model' . DS . 'Model.php';
 require_once CORE . 'controller' . DS . 'Controller.php';
 use SimpleORM\app\controller;
 
@@ -28,21 +29,28 @@ if ($uri == '/') {
     $src = explode('/', $uri);
     $model = ucfirst($src[1]);
     $controller = $model.'Controller';
-    $method = (isset($src[2])) ? $src[2] : 'index';    
+    $method = (isset($src[2])) ? $src[2] : 'index';
 
     if (isset($src[3]) && empty($the_request)) {
         $the_request = filter_var($src[3], FILTER_SANITIZE_STRING);
     }
 
     /*
+    * AppModel file
+    */
+    $app_model =  APP . 'model' . DS .'AppModel.php';
+
+    if (file_exists($app_model)) {
+        require_once $app_model;
+    }
+    /*
     * require files of current Model/Controller
     */
-    $model_file = __DIR__ . DS . 'app' . DS. ' model ' . DS . $model.'.php';
+    $model_file = APP . 'model ' . DS . $model.'.php';
 
     if (file_exists($model_file)) {
         require_once $model_file;
     }
-
     /*
     * call current class/method
     */

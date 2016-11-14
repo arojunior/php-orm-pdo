@@ -2,7 +2,6 @@
 
 namespace SimpleORM\app\model;
 
-require_once CORE . 'model' . DS . 'Model.php';
 use SimpleORM\core\model\Model;
 
 class AppModel extends Model
