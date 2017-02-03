@@ -35,7 +35,7 @@ class Model extends Database
         foreach ($dados as $k => $v) {
             $fields[] = $k;
         }
-        $fields = implode(',', $fields);        
+        $fields = implode(',', $fields);
 
         return $fields;
     }
@@ -113,12 +113,13 @@ class Model extends Database
 
         if (isset($dados[$this->pk])) {
             $this->find([$this->pk => $dados[$this->pk]]);
-            if ($this->count > 0) {
-                $this->update($dados);
-            } else {
-                $this->create($dados);
-            }
         }
+
+        if ($this->count > 0) {
+            return $this->update($dados);
+        }
+
+        return $this->create($dados);
     }
 
     public function update($dados)
