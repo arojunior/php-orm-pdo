@@ -29,13 +29,13 @@ class Model extends Database
     private function fields($dados = null)
     {
         if (empty($dados)) {
-            $fields = implode(',', $this->dados['fields']);
-        } else {
-            foreach ($dados as $k => $v) {
-                $fields[] = $k;
-            }
-            $fields = implode(',', $fields);
+            return  implode(',', $this->dados['fields']);
         }
+
+        foreach ($dados as $k => $v) {
+            $fields[] = $k;
+        }
+        $fields = implode(',', $fields);        
 
         return $fields;
     }
