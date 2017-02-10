@@ -16,6 +16,6 @@ class UsersController extends Controller
     {
         $result = $this->Users->find();
 
-        return ['list' => $this->Helper->json($result)];
+        return ['list' => $this->Helper->toJson($result)];
     }
 }

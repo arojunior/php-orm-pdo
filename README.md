@@ -1,6 +1,6 @@
 # PHP ORM PDO Micro Framework
 
-*I had to make a simple application but I didnt find good options of simple ORM for PHP, that's why I made this basic classes.* Ps.: It's under development yet.
+*I had to make a simple application but I didnt find good options of simple ORM for PHP, that's why I made this basic classes.* Ps.: It's under development.
 
 Let's get started:
 

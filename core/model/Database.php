@@ -4,8 +4,8 @@ namespace SimpleORM\core\model;
 
 class Database
 {
-    protected $conn;
-    public $db_config;
+    protected   $conn;
+    public      $db_config;
 
     /*
     * create database connection

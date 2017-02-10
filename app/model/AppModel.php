@@ -20,6 +20,6 @@ class AppModel extends Model
             return (count($where) > 1) ? implode(' AND ', $where) : ' AND '.$where[0];
         }
 
-        return null;
+        return $dados;
     }
 }

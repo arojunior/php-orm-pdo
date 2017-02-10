@@ -3,15 +3,17 @@ namespace SimpleORM\core\helper;
 
 class Helper
 {
-    public function json($dados)
+    public function toJson($dados, $charset = 'UTF-8')
     {
         header('Content-Type: application/json');
 
-        array_walk_recursive($dados, function (&$value, $key) {
-            if (is_string($value)) {
-                $value = utf8_encode(self::clean($value));
-            }
-        });
+        if ($charset <> 'UFT-8') {
+            array_walk_recursive($dados, function (&$value, $key) {
+                if (is_string($value)) {
+                    $value = utf8_encode(self::clean($value));
+                }
+            });
+        }
 
         return json_encode($dados);
     }

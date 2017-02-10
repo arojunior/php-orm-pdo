@@ -12,7 +12,7 @@ class Model extends Database
     private $stmt;
     private $dados;
     private $sql;
-    public $count;
+    public  $count;
 
     private function param($dados = null)
     {

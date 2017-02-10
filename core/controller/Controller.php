@@ -13,14 +13,18 @@ class Controller
     */
     public function __construct()
     {
+        $this->Helper = new Helper();
+
+        self::setClass();
+        self::loadModels();
+        self::loadHelpers();
+    }
+
+    private function setClass()
+    {
         $namespace = 'SimpleORM\app\controller\\';
         $class = str_replace($namespace, '', get_class($this));
         $this->class = str_replace('Controller', '', $class);
-
-        $this->Helper = new Helper();
-
-        self::loadModels();
-        self::loadHelpers();
     }
 
     /*
