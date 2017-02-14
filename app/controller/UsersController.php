@@ -14,8 +14,13 @@ class UsersController extends Controller
 
     public function get()
     {
-        $result = $this->Users->find();
+        $result = $this->Users->findAll();
 
         return ['list' => $this->Helper->toJson($result)];
+    }
+
+    public function add($data)
+    {
+        $this->Users->store($data);
     }
 }
