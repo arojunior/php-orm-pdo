@@ -89,7 +89,6 @@ Extending the Model class
 <?php
 // create a file to overwrite the database config
 
-require __DIR__ . '/../vendor/arojunior/php-orm-pdo/core/model/Model.php';
 use SimpleORM\core\model\Model;
 
 class AppModel extends Model
@@ -108,12 +107,12 @@ And then you can extend this class in your classes
 
 ```php
 <?php
-require __DIR__ . '/AppModel.php';
+use YourNamespace\AppModel;
 
 class Example extends AppModel
 {
     public $table = 't_user';
-    public $pk = 'user_id';
+    public $pk    = 'user_id';
 
     public function getAll()
     {
