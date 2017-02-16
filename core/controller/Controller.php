@@ -21,9 +21,9 @@ class Controller
 
     private function setClass()
     {
-        $namespace = 'SimpleORM\app\controller\\';
-        $class = str_replace($namespace, '', get_class($this));
-        $this->class = str_replace('Controller', '', $class);
+        $namespace      = 'SimpleORM\app\controller\\';
+        $class          = str_replace($namespace, '', get_class($this));
+        $this->class    = str_replace('Controller', '', $class);
     }
 
     /*
@@ -31,7 +31,7 @@ class Controller
     */
     private function loadModels()
     {
-        $this->use = !isset($this->use) ? [$this->class] : $this->use;
+        $this->use = ( ! isset($this->use)) ? [$this->class] : $this->use;
 
         if ($this->use) {
             foreach ($this->use as $model) {

@@ -10,25 +10,25 @@ class Model extends Database
     private $stmt;
     private $dados;
     private $sql;
-    public $count;
+    public  $count;
 
     public function __construct()
     {
         parent::__construct();
         self::setTable();
-        self::setPrivateKey();
+        self::setPrimaryKey();
     }
 
     private function setTable()
     {
-        if (!isset($this->table)) {
+        if ( ! isset($this->table)) {
             $this->table = strtolower(get_class($this));
         }
     }
 
-    private function setPrivateKey()
+    private function setPrimaryKey()
     {
-        if (!isset($this->pk)) {
+        if ( ! isset($this->pk)) {
             $this->pk = 'id';
         }
     }
@@ -75,7 +75,7 @@ class Model extends Database
         $sql = "SELECT {$fields} FROM {$this->table} {$where}";
         $this->stmt = $this->conn->prepare($sql);
 
-        if (!empty($where)) {
+        if ( ! empty($where)) {
             self::param();
         }
 
@@ -95,7 +95,7 @@ class Model extends Database
     {
         $fields = self::fields($this->dados);
         $values = self::values();
-        $sql = "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
+        $sql    = "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
 
         return $sql;
     }
