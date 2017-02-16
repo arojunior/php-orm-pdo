@@ -6,9 +6,6 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 require 'constants.php';
 require __DIR__ . '/vendor/autoload.php';
 
-require_once CORE_MODEL;
-require_once CORE_CONTROLLER;
-
 use SimpleORM\app\controller;
 
 $uri = $_SERVER['REQUEST_URI'];
@@ -40,16 +37,14 @@ if (isset($src[3]) && empty($the_request)) {
 /*
 * call current class/method
 */
-$controller_file = APP_CONTROLLER . $controller . PHP;
-
 try {
-    require $controller_file;
     $load_class = 'SimpleORM\app\controller\\' . $controller;
     $class      = new $load_class();
     $set        = $class->$method($the_request);
 } catch(Exception $e) {
     echo 'No '.$controller.' found for this route',  $e->getMessage(), "\n";
 }
+
 /*
 * Declare all variables if passed in return
 */

@@ -10,7 +10,28 @@ class Model extends Database
     private $stmt;
     private $dados;
     private $sql;
-    public  $count;
+    public $count;
+
+    public function __construct()
+    {
+        parent::__construct();
+        self::setTable();
+        self::setPrivateKey();
+    }
+
+    private function setTable()
+    {
+        if (!isset($this->table)) {
+            $this->table = strtolower(get_class($this));
+        }
+    }
+
+    private function setPrivateKey()
+    {
+        if (!isset($this->pk)) {
+            $this->pk = 'id';
+        }
+    }
 
     private function param($dados = null)
     {
@@ -47,41 +68,18 @@ class Model extends Database
         return 'WHERE '.implode($separator, $where);
     }
 
-    private function table()
+    private function find()
     {
-        return (isset($this->table)) ? $this->table : strtolower(get_class($this));
-    }
-
-    public function find($dados = null)
-    {
-        $this->dados = $dados;
-
         $fields = (isset($this->dados['fields'])) ? self::fields() : '*';
-        $table = self::table();
         $where = (isset($this->dados['conditions'])) ? self::conditions(' AND ') : '';
-        $sql = "SELECT {$fields} FROM {$table} {$where}";
+        $sql = "SELECT {$fields} FROM {$this->table} {$where}";
         $this->stmt = $this->conn->prepare($sql);
 
         if (!empty($where)) {
             self::param();
         }
 
-        $this->stmt->execute();
-
-        $result = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-        $this->count = count($result);
-
-        return $result;
-    }
-
-    public function query($sql)
-    {
-        $this->stmt = $this->conn->prepare($sql);
-        $this->stmt->execute();
-        $result = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-        $this->count = count($result);
-
-        return $result;
+        return $this->stmt->execute();
     }
 
     private function values()
@@ -97,18 +95,42 @@ class Model extends Database
     {
         $fields = self::fields($this->dados);
         $values = self::values();
-        $table = self::table();
-        $sql = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
+        $sql = "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
 
         return $sql;
     }
 
+    public function findAll($dados = null)
+    {
+        $this->dados = $dados;
+        self::find();
+        return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function findOne($dados = null)
+    {
+        $this->dados['conditions'] = $dados;
+        self::find();
+        return $this->stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function findById($id)
+    {
+        return self::findOne([$this->pk => $id]);
+    }
+
+    public function query($sql)
+    {
+        $this->stmt = $this->conn->prepare($sql);
+        $this->stmt->execute();
+        $result = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+        $this->count = count($result);
+
+        return $result;
+    }
+
     public function save($dados)
     {
-        if (!isset($this->pk)) {
-            $this->pk = 'id';
-        }
-
         if (isset($dados[$this->pk])) {
             $this->find([$this->pk => $dados[$this->pk]]);
         }
@@ -123,11 +145,6 @@ class Model extends Database
     public function update($dados)
     {
         $param = $dados;
-        $table = self::table();
-
-        if (!isset($this->pk)) {
-            $this->pk = 'id';
-        }
 
         $this->dados['conditions'] = [$this->pk => $dados[$this->pk]];
         $where = self::conditions('');
@@ -135,7 +152,7 @@ class Model extends Database
         $this->dados['conditions'] = $dados;
         $fields = str_replace('WHERE', '', self::conditions(','));
 
-        $sql = "UPDATE {$table} SET {$fields} {$where}";
+        $sql = "UPDATE {$this->table} SET {$fields} {$where}";
         $this->stmt = $this->conn->prepare($sql);
         self::param($param);
         $this->stmt->execute();

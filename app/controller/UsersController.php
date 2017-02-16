@@ -14,7 +14,7 @@ class UsersController extends Controller
 
     public function get()
     {
-        $result = $this->Users->findAll();
+        $result = $this->Users->findById('banyar@yahoo.com');
 
         return ['list' => $this->Helper->toJson($result)];
     }

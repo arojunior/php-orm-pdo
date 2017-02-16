@@ -68,8 +68,9 @@ Delete
 ```
 Read
 ```php
-	$this->Users->find(); // Select all data
-	$this->Users->find(['id' => 1]); // Select data with id = 1    
+	$this->Users->findAll(); // fetchAll
+	$this->Users->findOne(['email' => 'arojunior@gmail.com']);
+    $this->Users->findById($id);
 ```
 Row count (select/insert/update/delete)
 ```php
@@ -116,7 +117,7 @@ class Example extends AppModel
 
     public function getAll()
     {
-        return $this->find();
+        return $this->findAll();
     }
 }
 ```
