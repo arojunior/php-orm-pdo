@@ -2,7 +2,6 @@
 
 namespace SimpleORM\core\controller;
 
-require CORE . 'helper' . DS . 'Helper.php';
 use SimpleORM\core\helper\Helper;
 
 class Controller
@@ -52,7 +51,6 @@ class Controller
 
     private function load($path, $class)
     {
-        require APP . $path . DS . $class . '.php';
         $load_class = 'SimpleORM\app\\' . $path . '\\' . $class;
         $this->{$class} = new $load_class();
     }

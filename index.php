@@ -3,12 +3,12 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
-define('DS', DIRECTORY_SEPARATOR);
-define('APP', __DIR__ . DS . 'app' . DS);
-define('CORE', __DIR__ . DS . 'core' . DS);
+require 'constants.php';
+require __DIR__ . '/vendor/autoload.php';
 
-require_once CORE . 'model' . DS . 'Model.php';
-require_once CORE . 'controller' . DS . 'Controller.php';
+require_once CORE_MODEL;
+require_once CORE_CONTROLLER;
+
 use SimpleORM\app\controller;
 
 $uri = $_SERVER['REQUEST_URI'];
@@ -28,45 +28,28 @@ if ($uri == '/') {
     exit;
 }
 
-$src = explode('/', $uri);
-$model = ucfirst($src[1]);
+$src        = explode('/', $uri);
+$model      = ucfirst($src[1]);
 $controller = $model.'Controller';
-$method = (isset($src[2])) ? $src[2] : 'index';
+$method     = (isset($src[2])) ? $src[2] : 'index';
 
 if (isset($src[3]) && empty($the_request)) {
     $the_request = filter_var($src[3], FILTER_SANITIZE_STRING);
 }
 
 /*
-* AppModel file
-*/
-$app_model =  APP . 'model' . DS .'AppModel.php';
-
-if (file_exists($app_model)) {
-    require_once $app_model;
-}
-/*
-* require files of current Model/Controller
-*/
-$model_file = APP . 'model ' . DS . $model.'.php';
-
-if (file_exists($model_file)) {
-    require_once $model_file;
-}
-/*
 * call current class/method
 */
-$controller_file = APP . 'controller' . DS . $controller.'.php';
+$controller_file = APP_CONTROLLER . $controller . PHP;
 
-if (!file_exists($controller_file)) {
-    throw new Exception('Controller '.$controller.' Not Found');
+try {
+    require $controller_file;
+    $load_class = 'SimpleORM\app\controller\\' . $controller;
+    $class      = new $load_class();
+    $set        = $class->$method($the_request);
+} catch(Exception $e) {
+    echo 'No '.$controller.' found for this route',  $e->getMessage(), "\n";
 }
-
-require $controller_file;
-$load_class = 'SimpleORM\app\controller\\' . $controller;
-$class = new $load_class();
-$set = $class->$method($the_request);
-
 /*
 * Declare all variables if passed in return
 */
@@ -79,7 +62,7 @@ if (!empty($set) && is_array($set)) {
 /*
 * If method has a view file, include
 */
-$view_file = __DIR__ . DS . 'app' . DS . 'view' . DS . $model . DS . $method .'.php';
+$view_file = APP_VIEW . $model . DS . $method . PHP;
 
 if (file_exists($view_file)) {
     include $view_file;

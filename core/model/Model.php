@@ -2,8 +2,6 @@
 
 namespace SimpleORM\core\model;
 
-require_once 'Database.php';
-
 use SimpleORM\core\model\Database;
 use \PDO;
 
