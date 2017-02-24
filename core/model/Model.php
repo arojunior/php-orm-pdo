@@ -8,8 +8,10 @@ use \PDO;
 class Model extends Database
 {
     private $stmt;
-    private $dados;
+    private $data;
     private $sql;
+    private $where;
+    private $fields;
     public  $count;
 
     public function __construct()
@@ -33,53 +35,63 @@ class Model extends Database
         }
     }
 
-    private function param($dados = null)
+    private function param($data = null)
     {
-        if (empty($dados)) {
-            $dados = $this->dados['conditions'];
+        if (empty($data)) {
+            $data = $this->dados['conditions'];
         }
 
-        foreach ($dados as $k => $v) {
+        foreach ($data as $k => $v) {
             $tipo = (is_int($v)) ? PDO::PARAM_INT : PDO::PARAM_STR;
             $this->stmt->bindValue(":{$k}", $v, $tipo);
         }
     }
 
-    private function fields($dados = null)
+    private function fields($data = null)
     {
-        if (empty($dados)) {
-            return  implode(',', $this->dados['fields']);
+        if (empty($data) && array_key_exists('fields', $this->dados)) {
+            return implode(',', $this->dados['fields']);
         }
 
-        foreach ($dados as $k => $v) {
-            $fields[] = $k;
+        if ( ! empty($data)) {
+            foreach ($data as $k => $v) {
+                $fields[] = $k;
+            }
+            return implode(',', $fields);
         }
-        $fields = implode(',', $fields);
 
-        return $fields;
+        return '*';
     }
 
     private function conditions($separator)
     {
+        $param = [];
         foreach ($this->dados['conditions'] as $k => $v) {
-            $where[] = "{$k} = :{$k}";
+            $param[] = "{$k} = :{$k}";
         }
 
-        return 'WHERE '.implode($separator, $where);
+        return implode($separator, $param);
+    }
+
+    private function where()
+    {
+        return $this->where = (array_key_exists('conditions', $this->dados))
+                              ? 'WHERE ' . self::conditions(' AND ')
+                              : '';
     }
 
     private function find()
     {
-        $fields = (isset($this->dados['fields'])) ? self::fields() : '*';
-        $where = (isset($this->dados['conditions'])) ? self::conditions(' AND ') : '';
-        $sql = "SELECT {$fields} FROM {$this->table} {$where}";
+        $sql = "SELECT ".self::fields()." FROM {$this->table} ".self::where();
+
         $this->stmt = $this->conn->prepare($sql);
 
-        if ( ! empty($where)) {
+        if ( ! empty($this->where)) {
             self::param();
         }
 
-        return $this->stmt->execute();
+        $this->stmt->execute();
+        return $this;
     }
 
     private function values()
@@ -91,27 +103,43 @@ class Model extends Database
         return implode(',', $values);
     }
 
-    private function insert()
+    private function insertQueryString()
     {
         $fields = self::fields($this->dados);
         $values = self::values();
-        $sql    = "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
 
-        return $sql;
+        return "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
     }
 
-    public function findAll($dados = null)
+    private function updateWhere($data)
     {
-        $this->dados = $dados;
-        self::find();
-        return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+        $this->dados['conditions'] = [$this->pk => $data[$this->pk]];
+        $where = 'WHERE '.self::conditions('');
+        unset($data[$this->pk]);
+
+        return $where;
     }
 
-    public function findOne($dados = null)
+    private function updateQueryString($data)
     {
-        $this->dados['conditions'] = $dados;
-        self::find();
-        return $this->stmt->fetch(PDO::FETCH_ASSOC);
+        $this->dados['conditions'] = $data;
+        $fields = self::conditions(',');
+
+        return "UPDATE {$this->table} SET {$fields} {$this->where}";
+    }
+
+    public function findAll($data = null)
+    {
+        $this->dados = $data;
+        return $this->find()
+                    ->stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function findOne($data)
+    {
+        $this->dados['conditions'] = $data;
+        return $this->find()
+                    ->stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function findById($id)
@@ -123,49 +151,48 @@ class Model extends Database
     {
         $this->stmt = $this->conn->prepare($sql);
         $this->stmt->execute();
-        $result = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result      = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->count = count($result);
 
         return $result;
     }
 
-    public function save($dados)
+    public function save($data)
     {
-        if (isset($dados[$this->pk])) {
-            $this->find([$this->pk => $dados[$this->pk]]);
+        if (array_key_exists($this->pk, $data)) {
+            $this->count = $this->findOne([$this->pk => $data[$this->pk]]);
         }
 
-        if ($this->count > 0) {
-            return $this->update($dados);
+        if (! empty($this->count)) {
+            return $this->update($data);
         }
 
-        return $this->create($dados);
+        return $this->create($data);
     }
 
-    public function update($dados)
+    public function update($data)
     {
-        $param = $dados;
+        if ( ! array_key_exists($this->pk, $data)) {
+            return false;
+        }
 
-        $this->dados['conditions'] = [$this->pk => $dados[$this->pk]];
-        $where = self::conditions('');
-        unset($dados[$this->pk]);
-        $this->dados['conditions'] = $dados;
-        $fields = str_replace('WHERE', '', self::conditions(','));
-
-        $sql = "UPDATE {$this->table} SET {$fields} {$where}";
-        $this->stmt = $this->conn->prepare($sql);
+        $param       = $data;
+        $this->where = self::updateWhere($data);
+        $this->stmt  = $this->conn->prepare(self::updateQueryString($data));
         self::param($param);
         $this->stmt->execute();
         $this->count = $this->stmt->rowCount();
     }
 
-    public function create($dados)
+    public function create($data)
     {
-        $this->dados = $dados;
+        $this->dados = $data;
 
-        $this->stmt = $this->conn->prepare(self::insert());
-        self::param($dados);
+        $this->stmt = $this->conn->prepare(self::insertQueryString());
+        self::param($data);
+
         $this->stmt->execute();
         $this->count = $this->stmt->rowCount();
     }
+
 }

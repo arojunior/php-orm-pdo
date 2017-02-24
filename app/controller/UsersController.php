@@ -14,13 +14,15 @@ class UsersController extends Controller
 
     public function get()
     {
-        $result = $this->Users->findById('banyar@yahoo.com');
+        $result = $this->Users->findById('arojunior@gmail.com');
 
         return ['list' => $this->Helper->toJson($result)];
     }
 
-    public function add($data)
+    public function add()
     {
+        $data = ['email' => 'arojunior@gmail.com'];
         $this->Users->store($data);
     }
+
 }
