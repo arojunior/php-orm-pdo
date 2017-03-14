@@ -2,7 +2,7 @@
     "name": "arojunior/php-orm-pdo",
     "license": "MIT",
     "description": "Micro PHP ORM Framework",
-    "version": "1.0",
+    "version": "1.1",
     "authors": [
         {
             "name": "Junior Oliveira",
