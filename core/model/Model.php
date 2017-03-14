@@ -24,7 +24,8 @@ class Model extends Database
     private function setTable()
     {
         if ( ! isset($this->table)) {
-            $this->table = strtolower(get_class($this));
+            $modelName = (new \ReflectionClass($this))->getShortName();
+            $this->table = strtolower($modelName);            
         }
     }
 
