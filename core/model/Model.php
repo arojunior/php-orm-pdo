@@ -8,7 +8,7 @@ use \PDO;
 class Model extends Database
 {
     private $stmt;
-    private $data;
+    private $data = array();
     private $sql;
     private $where;
     private $fields;
@@ -25,7 +25,7 @@ class Model extends Database
     {
         if ( ! isset($this->table)) {
             $modelName = (new \ReflectionClass($this))->getShortName();
-            $this->table = strtolower($modelName);            
+            $this->table = strtolower($modelName);
         }
     }
 
@@ -39,7 +39,7 @@ class Model extends Database
     private function param($data = null)
     {
         if (empty($data)) {
-            $data = $this->dados['conditions'];
+            $data = $this->data['conditions'];
         }
 
         foreach ($data as $k => $v) {
@@ -50,8 +50,8 @@ class Model extends Database
 
     private function fields($data = null)
     {
-        if (empty($data) && array_key_exists('fields', $this->dados)) {
-            return implode(',', $this->dados['fields']);
+        if (empty($data) && isset($this->data['fields'])) {
+            return implode(',', $this->data['fields']);
         }
 
         if ( ! empty($data)) {
@@ -67,7 +67,7 @@ class Model extends Database
     private function conditions($separator)
     {
         $param = [];
-        foreach ($this->dados['conditions'] as $k => $v) {
+        foreach ($this->data['conditions'] as $k => $v) {
             $param[] = "{$k} = :{$k}";
         }
 
@@ -76,7 +76,7 @@ class Model extends Database
 
     private function where()
     {
-        return $this->where = (array_key_exists('conditions', $this->dados))
+        return $this->where = (isset($this->data['conditions']))
                               ? 'WHERE ' . self::conditions(' AND ')
                               : '';
     }
@@ -97,7 +97,7 @@ class Model extends Database
 
     private function values()
     {
-        foreach ($this->dados as $k => $v) {
+        foreach ($this->data as $k => $v) {
             $values[] = ":{$k}";
         }
 
@@ -106,7 +106,7 @@ class Model extends Database
 
     private function insertQueryString()
     {
-        $fields = self::fields($this->dados);
+        $fields = self::fields($this->data);
         $values = self::values();
 
         return "INSERT INTO {$this->table} ({$fields}) VALUES ({$values})";
@@ -114,7 +114,7 @@ class Model extends Database
 
     private function updateWhere($data)
     {
-        $this->dados['conditions'] = [$this->pk => $data[$this->pk]];
+        $this->data['conditions'] = [$this->pk => $data[$this->pk]];
         $where = 'WHERE '.self::conditions('');
         unset($data[$this->pk]);
 
@@ -123,7 +123,7 @@ class Model extends Database
 
     private function updateQueryString($data)
     {
-        $this->dados['conditions'] = $data;
+        $this->data['conditions'] = $data;
         $fields = self::conditions(',');
 
         return "UPDATE {$this->table} SET {$fields} {$this->where}";
@@ -131,14 +131,14 @@ class Model extends Database
 
     public function findAll($data = null)
     {
-        $this->dados = $data;
+        $this->data = $data;
         return $this->find()
                     ->stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function findOne($data)
     {
-        $this->dados['conditions'] = $data;
+        $this->data['conditions'] = $data;
         return $this->find()
                     ->stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -187,7 +187,7 @@ class Model extends Database
 
     public function create($data)
     {
-        $this->dados = $data;
+        $this->data = $data;
 
         $this->stmt = $this->conn->prepare(self::insertQueryString());
         self::param($data);
