@@ -5,7 +5,7 @@ namespace SimpleORM\core\model;
 use SimpleORM\core\model\Database;
 use \PDO;
 
-class Model extends Database
+abstract class Model extends Database
 {
     private $stmt;
     private $data = array();

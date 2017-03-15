@@ -4,7 +4,7 @@ namespace SimpleORM\core\controller;
 
 use SimpleORM\core\helper\Helper;
 
-class Controller
+abstract class Controller
 {
     private $class;
     /*
@@ -14,16 +14,16 @@ class Controller
     {
         $this->Helper = new Helper();
 
-        self::setClass();
+        $this->class = self::setClass();
         self::loadModels();
         self::loadHelpers();
     }
 
     private function setClass()
     {
-        $namespace      = 'SimpleORM\app\controller\\';
-        $class          = str_replace($namespace, '', get_class($this));
-        $this->class    = str_replace('Controller', '', $class);
+        $className = (new \ReflectionClass($this))->getShortName();
+
+        return str_replace('Controller', '', $className);
     }
 
     /*

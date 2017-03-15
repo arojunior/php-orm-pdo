@@ -2,7 +2,7 @@
 
 namespace SimpleORM\core\model;
 
-class Database
+abstract class Database
 {
     protected   $conn;
     public      $db_config;
