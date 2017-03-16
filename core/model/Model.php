@@ -140,8 +140,8 @@ abstract class Model extends Database
     public function findOne($data)
     {
         $this->data['conditions'] = $data;
-        return $this->find()
-                    ->stmt->fetch(PDO::FETCH_ASSOC);
+        return $this->fetch = $this->find()
+                                   ->stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function findById($id)
