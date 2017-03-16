@@ -12,7 +12,8 @@ abstract class Model extends Database
     private $sql;
     private $where;
     private $fields;
-    public  $count;
+    private $count;
+    private $fetch;
 
     public function __construct()
     {
@@ -146,6 +147,20 @@ abstract class Model extends Database
     public function findById($id)
     {
         return self::findOne([$this->pk => $id]);
+    }
+
+    public function exists($id)
+    {
+        if (is_array($id)) {
+          return (self::findOne($id));
+        }
+
+        return (self::findById($id));
+    }
+
+    public function fetch()
+    {
+        return $this->fetch;
     }
 
     public function query($sql)
