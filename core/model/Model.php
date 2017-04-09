@@ -14,6 +14,7 @@ abstract class Model extends Database
     private $fields;
     private $count;
     private $fetch;
+    private $lastId;
 
     public function __construct()
     {
@@ -163,6 +164,12 @@ abstract class Model extends Database
         return $this->fetch;
     }
 
+    public function lastInsertId()
+    {
+        $id = $this->conn->lastInsertId();
+        return ($id) ? $id : $this->lastId;
+    }
+
     public function query($sql)
     {
         $this->stmt = $this->conn->prepare($sql);
@@ -177,6 +184,7 @@ abstract class Model extends Database
     {
         if (array_key_exists($this->pk, $data)) {
             $this->count = $this->findOne([$this->pk => $data[$this->pk]]);
+            $this->lastId = $data[$this->pk];
         }
 
         if (! empty($this->count)) {
