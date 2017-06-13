@@ -65,7 +65,7 @@ class Users extends Model
 
 ```
 
-Creating a new user (without check)
+### Creating a new user (without check)
 
 ```php
 $this->Users->create([
@@ -74,7 +74,7 @@ $this->Users->create([
 ]);
 ```
 
-Updating a user with id = 1
+### Updating a user with id = 1
 
 ```php
 $this->Users->update([
@@ -105,9 +105,13 @@ $this->Users->findOne(['email' => 'arojunior@gmail.com']);
 
 $this->Users->findById($id);
 ```
-Row count (select/insert/update/delete)
+### Checking
 ```php
-echo $this->Users->count;
+$this->Users->exists($id);
+```
+in case of true, you cat get the data with:
+```php
+$this->Users->fetch();
 ```
 
 ### Convetions if you want to use as a framework
