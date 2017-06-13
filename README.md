@@ -69,8 +69,8 @@ Creating a new user (without check)
 
 ```php
 $this->Users->create([
-    'name' => 'Junior Oliveira',
-    'email' => 'arojunior@gmail.com'
+  'name' => 'Junior Oliveira',
+  'email' => 'arojunior@gmail.com'
 ]);
 ```
 
@@ -78,8 +78,8 @@ Updating a user with id = 1
 
 ```php
 $this->Users->update([
-    'id' => 1,
-	'email' => 'contato@arojunior.com'
+  'id' => 1,
+  'email' => 'contato@arojunior.com'
 ]);
 
 ```
@@ -89,8 +89,8 @@ Let the ORM choose if it will create or update. The ORM will execute the find me
 ### Saving data
 ```php
 $this->Users->save([
-    'id' => 1,
-	'name' => 'Junior Oliveira'
+  'id' => 1,
+  'name' => 'Junior Oliveira'
 ]);
 ```
 ### Delete
