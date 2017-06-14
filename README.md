@@ -1,17 +1,9 @@
-# PHP ORM PDO Micro Framework
-
-- CRUD functions
-- Auto load Model classes in Controllers
-- To use the automatic functions you should use the filename and structure conventions
-- Just follow the exemple on /controller/UsersController.php
-- All controllers in /app/controllers folder
-- All models in /app/models folder
-
 ### Installing via composer and using as a lib
 
 ```shell
 composer require arojunior/php-orm-pdo
 ```
+
 ### create a file to overwrite the database config
 
 ```php
@@ -28,6 +20,7 @@ class AppModel extends Model
 }
 
 ```
+
 #### And then you can extend this class in your classes
 
 ```php
@@ -74,6 +67,23 @@ $this->Users->create([
 ]);
 ```
 
+**Let the ORM choose if it will be created or updated. The ORM will execute the find method before to decide if will create or update data**
+
+### Saving data
+
+```php
+$this->Users->save([
+  'id' => 1,
+  'name' => 'Junior Oliveira'
+]);
+```
+
+### Retrieving the id
+
+```php
+$this->Users->lastSavedId();
+```
+
 ### Updating a user with id = 1
 
 ```php
@@ -81,23 +91,16 @@ $this->Users->update([
   'id' => 1,
   'email' => 'contato@arojunior.com'
 ]);
-
 ```
 
-Let the ORM choose if it will create or update. The ORM will execute the find method before to decide if will create or update
-
-### Saving data
-```php
-$this->Users->save([
-  'id' => 1,
-  'name' => 'Junior Oliveira'
-]);
-```
 ### Delete
+
 ```php
 $this->Users->delete(['id' => 1]);
 ```
+
 ## Read
+
 ```php
 $this->Users->findAll(); // fetchAll
 
@@ -105,16 +108,29 @@ $this->Users->findOne(['email' => 'arojunior@gmail.com']);
 
 $this->Users->findById($id);
 ```
+
 ### Checking
+
 ```php
 $this->Users->exists($id);
 ```
+
 in case of true, you cat get the data with:
+
 ```php
 $this->Users->fetch();
 ```
 
-### Convetions if you want to use as a framework
+### Functionalities if used as Framework
+
+- CRUD functions
+- Auto load Model classes in Controllers
+- To use the automatic functions you should use the filename and structure conventions
+- Just follow the example on /controller/UsersController.php
+- All controllers in /app/controllers folder
+- All models in /app/models folder
+
+### Convetions
 
 - All controllers in /app/controller path
 - All models in /app/model path
