@@ -164,7 +164,7 @@ abstract class Model extends Database
         return $this->fetch;
     }
 
-    public function lastInsertId()
+    public function lastSavedId()
     {
         $id = $this->conn->lastInsertId();
         return ($id) ? $id : $this->lastId;
