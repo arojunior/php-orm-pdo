@@ -225,6 +225,10 @@ abstract class Model extends Database
 
         $sql = "DELETE FROM {$this->table} ".self::where();
 
+        if ( ! empty($this->where)) {
+            self::param();
+        }
+
         $this->stmt = $this->conn->prepare($sql);
 
         $this->stmt->execute();
