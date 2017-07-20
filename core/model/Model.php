@@ -219,4 +219,18 @@ abstract class Model extends Database
         $this->count = $this->stmt->rowCount();
     }
 
+    public function delete()
+    {
+        $sql = "DELETE FROM {$this->table} ".self::where();
+
+        $this->stmt = $this->conn->prepare($sql);
+
+        if ( ! empty($this->where)) {
+            self::param();
+        }
+
+        $this->stmt->execute();
+        $this->count = $this->stmt->rowCount();
+    }
+
 }
