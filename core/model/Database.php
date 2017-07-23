@@ -16,7 +16,7 @@ abstract class Database
             $this->db_config = parse_ini_file('config.ini');
         }
 
-        $this->conn = new \PDO("mysql:host={$this->db_config['db_host']};".
+        $this->conn = new \PDO("mysql:host={$this->db_config['db_host']};" .
                                 "dbname={$this->db_config['db_name']}",
                                 $this->db_config['db_user'],
                                 $this->db_config['db_pass']

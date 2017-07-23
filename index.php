@@ -27,7 +27,7 @@ if ($uri == '/') {
 
 $src        = explode('/', $uri);
 $model      = ucfirst($src[1]);
-$controller = $model.'Controller';
+$controller = $model . 'Controller';
 $method     = (isset($src[2])) ? $src[2] : 'index';
 
 if (isset($src[3]) && empty($the_request)) {
@@ -41,14 +41,14 @@ try {
     $load_class = 'SimpleORM\app\controller\\' . $controller;
     $class      = new $load_class();
     $set        = $class->$method($the_request);
-} catch(Exception $e) {
-    echo 'No '.$controller.' found for this route',  $e->getMessage(), "\n";
+} catch (Exception $e) {
+    echo 'No ' . $controller . ' found for this route', $e->getMessage(), "\n";
 }
 
 /*
 * Declare all variables if passed in return
 */
-if (!empty($set) && is_array($set)) {
+if ( ! empty($set) && is_array($set)) {
     foreach ($set as $k => $v) {
         ${$k} = $v;
     }

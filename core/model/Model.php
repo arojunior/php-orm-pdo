@@ -85,7 +85,7 @@ abstract class Model extends Database
 
     private function find()
     {
-        $sql = "SELECT ".self::fields()." FROM {$this->table} ".self::where();
+        $sql = "SELECT " . self::fields() . " FROM {$this->table} " . self::where();
 
         $this->stmt = $this->conn->prepare($sql);
 
@@ -117,7 +117,7 @@ abstract class Model extends Database
     private function updateWhere($data)
     {
         $this->data['conditions'] = [$this->pk => $data[$this->pk]];
-        $where = 'WHERE '.self::conditions('');
+        $where = 'WHERE ' . self::conditions('');
         unset($data[$this->pk]);
 
         return $where;
@@ -142,7 +142,7 @@ abstract class Model extends Database
     {
         $this->data['conditions'] = $data;
         return $this->fetch = $this->find()
-                                   ->stmt->fetch(PDO::FETCH_ASSOC);
+                                    ->stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function findById($id)
@@ -153,7 +153,7 @@ abstract class Model extends Database
     public function exists($id)
     {
         if (is_array($id)) {
-          return (self::findOne($id));
+            return (self::findOne($id));
         }
 
         return (self::findById($id));
@@ -187,7 +187,7 @@ abstract class Model extends Database
             $this->lastId = $data[$this->pk];
         }
 
-        if (! empty($this->count)) {
+        if ( ! empty($this->count)) {
             return $this->update($data);
         }
 
@@ -223,7 +223,7 @@ abstract class Model extends Database
     {
         $this->data['conditions'] = $data;
 
-        $sql = "DELETE FROM {$this->table} ".self::where();
+        $sql = "DELETE FROM {$this->table} " . self::where();
         $this->stmt = $this->conn->prepare($sql);
 
         if ( ! empty($this->where)) {
